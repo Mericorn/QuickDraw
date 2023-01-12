@@ -13,3 +13,26 @@ body{
 #whatsketch{
     color:rgba(89, 6, 89, 0.719);
 }
+h1{
+    color: rgb(230, 232, 129);
+    background-color: rgb(214, 185, 241);
+}
+#show_sketch{
+    float:right;
+}
+canvas{
+    border: 5px dotted darkmagenta;
+    border-radius: 15px;
+    animation-name: changes;
+    animation-duration: 4s;
+    margin-top: 50px;
+    animation-iteration-count: infinite;
+}
+@keyframes changes {
+    from {box-shadow: 1px 1px 38px rgb(118, 6, 245);}
+    to {box-shadow: 1px 1px 38px rgb(59, 28, 95);}
+}
+p{
+    padding-top: 10px;
+    font-size: 25px;
+}
