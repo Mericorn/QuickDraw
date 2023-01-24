@@ -2,7 +2,7 @@ quick_draw_data_set = ["aircraft carrier", "airplane", "alarm clock", "ambulance
 var random_number = Math.floor((Math.random() * quick_draw_data_set.length) + 1);
 console.log(Element_of_array = quick_draw_data_set[random_number]);
 var sketch = Element_of_array = quick_draw_data_set[random_number];
-document.getElementById("whatsketch").innerHTML = "Sketch to be drawn: " + sketch;
+document.getElementById('whatsketch').innerHTML = "Sketch to be drawn: " + sketch;
 var timer_counter = 0;
 var time_check = "";
 var drawn_sketch = "";
@@ -11,21 +11,31 @@ var score = 0;
 function updateCanvas(){
     background("white");
 }
+function preload(){
+    classifier = ml5.imageClassifier('DoodleNet');
+}
 function setup(){
     canvas= createCanvas(280, 280);
     canvas.center();
     background("white");
+    canvas.mouseReleased(classifyCanvas);
 }
 function draw(){
+    check_sketch();
+    strokeWeight(4);
+    stroke(0);
+    if (mouseIsPressed){
+        line (pmouseX, pmouseY, mouseX, mouseY);
+    }
     if (drawn_sketch == sketch){
         answer_holder = "set";
         score++
-        document.getElementById("score").innerHTML = "Score: " + score;
+        document.getElementById('score').innerHTML = "Score: " + score;
     }
 }
 function check_sketch(){
     timer_counter++
-    document.getElementById("time").innerHTML = "Timer: " + timer_counter;
+    document.getElementById('time').innerHTML = "Timer: " + timer_counter;
     console.log(timer_counter);
     if (timer_counter > 400){
         timer_counter = 0;
@@ -35,5 +45,26 @@ function check_sketch(){
         time_check = "";
         answer_holder = "";
         updateCanvas();
+    }
+}
+function classifyCanvas(){
+    classifier.classify(canvas, gotResult);
+}
+function gotResult(error, results){
+    if (error){      
+        console.error(error);
+}
+    console.log(results);
+    drawn_sketch = quick_draw_data_set.shift();
+    identify();
+    document.getElementById('guess').innerHTML = 'Your Sketch: ' + drawn_sketch;
+    document.getElementById('confidence').innerHTML = 'Confidence: ' + Math.round(results[0].confidence * 100) + '%';
+
+}
+function identify(){
+    if (drawn_sketch == sketch){
+        answer_holder = "set";
+        score++
+        document.getElementById('score').innerHTML = "Score: " + score;
     }
 }
